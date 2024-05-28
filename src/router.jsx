@@ -9,6 +9,7 @@ import AuthRequired from "./hooks/useAuthContext";
 
 import AddProperty from "./pages/seller/addProperty";
 import PropertyList from "./pages/seller/propertyList";
+import PropertyDetail from "./pages/seller/propertyDetail";
 
 export const Routers = (params) => {
     return (
@@ -23,10 +24,11 @@ export const Routers = (params) => {
                         
                         <Route index element={<AuthRequired><Home/></AuthRequired>}/>
                         <Route path="/property/add" element={<AuthRequired><AddProperty/></AuthRequired>}/>
+                        <Route path="/property/:id" element={<AuthRequired><PropertyDetail/></AuthRequired>}/>
                         <Route path="/property" element={<AuthRequired><PropertyList/></AuthRequired>}/>
                     </Route>
                     <Route
-                        element={<AuthLayout />}
+                        element={<AuthLayout />}    
                     >
                         <Route path="/signup" element={<Signup />} />
                         <Route path="/login" element={<Login />} />

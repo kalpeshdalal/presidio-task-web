@@ -2,14 +2,17 @@
 
 import React, { useState } from "react";
 import { FaHeart, FaInfoCircle } from "react-icons/fa";
-import { apiGET, apiPOST } from "../../utilies/apiHandler";
+import { apiDELETE, apiGET, apiPOST } from "../../utilies/apiHandler";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { MdOutlineEdit } from "react-icons/md";
 
 const PropertyCard = ({ property }) => {
     const userData = useSelector(
         (state) => state.authenticationReducer.userData
     );
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [liked, setLiked] = useState(property?.isLikedByUser);
     const [likeCount, setLikeCount] = useState(property?.totalLikes || 0);
@@ -17,8 +20,11 @@ const PropertyCard = ({ property }) => {
     const toggleDetails = () => {
         setIsOpen(!isOpen);
     };
-    console.log(property);
-
+    const cardClickHandler = () => {
+        if (userData?.role == "seller") {
+            navigate(`/property/${property.id || property._id}`);
+        }
+    };
     const getSellerDetails = async () => {
         try {
             const response = await apiGET(
@@ -56,8 +62,25 @@ const PropertyCard = ({ property }) => {
         }
     };
 
+    const handleDelete = async () => {
+        try {
+            const response = await apiDELETE(
+                `/v1/property/${property?.id || property?._id}`
+            );
+            console.log(response);
+            if (response?.data?.status) {
+                toast.success(
+                    "Deleted property successfully!"
+                );
+                location.reload();
+
+            } else {
+            }
+        } catch (error) {}
+    };
+
     return (
-        <div className="max-w-sm rounded overflow-hidden shadow-xl my-2 bg-white cursor-pointer">
+        <div className="max-w-sm  relative rounded overflow-hidden shadow-xl my-2 bg-white cursor-pointer">
             <img
                 className="w-[400px] h-[280px]"
                 src={
@@ -65,7 +88,10 @@ const PropertyCard = ({ property }) => {
                     "https://www.loans.com.au/dA/9de8aa8d51/what-factors-affect-property-value.png"
                 }
                 alt="Property"
+                onClick={cardClickHandler}
             />
+            {userData?.role =='seller' &&<MdOutlineEdit  className="text-white absolute top-2 z-10 right-2"/>}
+
             <div className="px-5 py-4">
                 <div className="font-bold text-xl mb-2">
                     {property.noOfBedroom} BHK Apartment in {property.area},{" "}
@@ -84,17 +110,21 @@ const PropertyCard = ({ property }) => {
                 </div>
                 {sellerDetails?.firstName && sellerDetails?.lastName && (
                     <div className="mt-5 text-sm text-[#858585]">
-                        Seller Name : {" " +sellerDetails?.firstName +" " +sellerDetails?.lastName}
+                        Seller Name :{" "}
+                        {" " +
+                            sellerDetails?.firstName +
+                            " " +
+                            sellerDetails?.lastName}
                     </div>
                 )}
                 {sellerDetails?.email && (
                     <div className="mt-1 text-sm text-[#858585]">
-                        Seller Email : {" " +sellerDetails?.email}
+                        Seller Email : {" " + sellerDetails?.email}
                     </div>
                 )}
                 {sellerDetails?.phone && (
                     <div className="mt-1 text-sm text-[#858585]">
-                        Seller Phone : {" " +sellerDetails?.phone}
+                        Seller Phone : {" " + sellerDetails?.phone}
                     </div>
                 )}
 
@@ -121,21 +151,31 @@ const PropertyCard = ({ property }) => {
                 >
                     Details
                 </button>
-                <button
-                    disabled={
-                        userData?.id == property?.createdBy ||
-                        userData?._id == property?.createdBy
-                    }
-                    onClick={() => getSellerDetails()}
-                    className={`${
-                        userData?.id == property?.createdBy ||
-                        userData?._id == property?.createdBy
-                            ? "bg-green-200"
-                            : "bg-green-500 hover:bg-green-700"
-                    }  text-white font-bold py-2 px-4 rounded flex items-center`}
-                >
-                    <FaInfoCircle className="mr-2" /> I'm Interested
-                </button>
+
+                {userData?.role == "seller" ? (
+                    <button
+                        onClick={() => handleDelete()}
+                        className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-10 rounded flex items-center`}
+                    >
+                        <FaInfoCircle className="mr-4" /> Delete
+                    </button>
+                ) : (
+                    <button
+                        disabled={
+                            userData?.id == property?.createdBy ||
+                            userData?._id == property?.createdBy
+                        }
+                        onClick={() => getSellerDetails()}
+                        className={`${
+                            userData?.id == property?.createdBy ||
+                            userData?._id == property?.createdBy
+                                ? "bg-green-200"
+                                : "bg-green-500 hover:bg-green-700"
+                        }  text-white font-bold py-2 px-4 rounded flex items-center`}
+                    >
+                        <FaInfoCircle className="mr-2" /> I'm Interested
+                    </button>
+                )}
             </div>
         </div>
     );

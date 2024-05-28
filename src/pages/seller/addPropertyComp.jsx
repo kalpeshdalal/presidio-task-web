@@ -94,6 +94,7 @@ const AddPropertyComp = () => {
         }
         try {
             const response = await apiPOST("/v1/property/", formData);
+            console.log(response);
             if (response?.status === 201) {
                 toast.success("Property Added Successfully!");
                 navigate("/");
