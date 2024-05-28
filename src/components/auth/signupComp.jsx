@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import PrimaryButton from "../common/buttonComp/buttonComp";
 import { apiPOST } from "../../utilies/apiHandler";
-import InputCompAuth from "../common/InputComp/InputCompAuth";
+import InputCompAuth from "../common/InputComp/inputCompAuth";
 
 export const SignupComp = () => {
     const [formData, setFormData] = useState({
