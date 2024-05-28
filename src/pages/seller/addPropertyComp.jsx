@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiPOST } from "../../utilies/apiHandler";
 import { useSelector } from "react-redux";
-import InputCompAuth from "../../components/common/InputComp/InputCompAuth";
+import InputCompAuth from "../../components/common/InputComp/inputCompAuth";
 import PrimaryButton from "../../components/common/buttonComp/buttonComp";
 import { toast } from "react-toastify";
 
