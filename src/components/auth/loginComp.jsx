@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/authenticationReducer";
-import InputCompAuth from '../common/InputComp/InputCompAuth.jsx';
 import PrimaryButton from "../common/buttonComp/buttonComp";
 import { toast } from "react-toastify";
 import { apiPOST } from "../../utilies/apiHandler";
+import InputCompAuth from "../common/InputComp/InputCompAuth";
 
 export const LoginComp = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });

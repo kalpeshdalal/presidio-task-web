@@ -3,9 +3,9 @@ import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import InputCompAuth from '../../common/InputComp/InputCompAuth.jsx';
 import PrimaryButton from "../common/buttonComp/buttonComp";
 import { apiPOST } from "../../utilies/apiHandler";
+import InputCompAuth from "../common/InputComp/InputCompAuth";
 
 export const SignupComp = () => {
     const [formData, setFormData] = useState({
